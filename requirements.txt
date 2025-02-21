@@ -1,0 +1,5 @@
+pyTelegramBotAPI
+aiohttp
+deep-translator
+certifi
+telebot
