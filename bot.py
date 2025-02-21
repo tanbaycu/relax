@@ -93,7 +93,12 @@ async def thong_tin_ngau_nhien(message):
         await bot.reply_to(message, "🔄 Bạn đang nhận thông tin rồi. Dùng /dungthongtin để dừng nhé!")
         return
 
-    processing_msg = await bot.reply_to(message, "🔍 Đang tìm kiếm thông tin thú vị cho bạn...")
+    try:
+        processing_msg = await bot.reply_to(message, "🔍 Đang tìm kiếm thông tin thú vị cho bạn...")
+    except Exception as e:
+        logger.error(f"Lỗi khi gửi tin nhắn xử lý: {str(e)}")
+        await bot.send_message(message.chat.id, "Có lỗi xảy ra khi bắt đầu tìm kiếm thông tin. Vui lòng thử lại sau.")
+        return
 
     async def gui_thong_tin():
         while True:
@@ -109,9 +114,13 @@ async def thong_tin_ngau_nhien(message):
                     f"🇻🇳 Tiếng Việt:\n{noi_dung_dich}\n\n"
                     f"💡 Mẹo: Dùng /dungthongtin để dừng nhận thông tin."
                 )
-                await bot.delete_message(message.chat.id, processing_msg.message_id)
+                try:
+                    await bot.delete_message(message.chat.id, processing_msg.message_id)
+                except Exception as delete_error:
+                    logger.warning(f"Không thể xóa tin nhắn xử lý: {str(delete_error)}")
+                
                 await bot.send_message(message.chat.id, phan_hoi, parse_mode='Markdown')
-                await asyncio.sleep(30)  
+                await asyncio.sleep(20)  # Gửi mỗi 20 giây
             except Exception as e:
                 logger.error(f"Lỗi khi gửi thông tin: {str(e)}")
                 await bot.send_message(message.chat.id, "❌ Có lỗi xảy ra. Đang thử lại...")
