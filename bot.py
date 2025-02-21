@@ -111,7 +111,7 @@ async def thong_tin_ngau_nhien(message):
                 )
                 await bot.delete_message(message.chat.id, processing_msg.message_id)
                 await bot.send_message(message.chat.id, phan_hoi, parse_mode='Markdown')
-                await asyncio.sleep(20)  # Gửi mỗi 60 giây
+                await asyncio.sleep(30)  
             except Exception as e:
                 logger.error(f"Lỗi khi gửi thông tin: {str(e)}")
                 await bot.send_message(message.chat.id, "❌ Có lỗi xảy ra. Đang thử lại...")
